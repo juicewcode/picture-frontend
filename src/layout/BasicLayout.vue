@@ -5,7 +5,7 @@
                 <GlobelHeader/>
             </a-layout-header>
             <a-layout-content class="content">
-                <!-- <router-view/> -->
+                <router-view/>
             </a-layout-content>
             <a-layout-footer class="footer">
                 <a href="http://www.juicew.com" target="_blank">果汁云图库</a>
