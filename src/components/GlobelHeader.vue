@@ -6,7 +6,7 @@
             <RouterLink to="/">
             <div class="title-bar">
                 <img class="logo" src="../assets/logo.jpg" alt="logo" />
-                <div class="title">鱼皮云图库</div>
+                <div class="title">果汁云图库</div>
             </div>
             </RouterLink>
         </a-col>
@@ -104,6 +104,16 @@ const originItems = [
     label: '主页',
     title: '主页',
   },
+  {  
+    key: '/add_picture',  
+    label: '创建图片',  
+    title: '创建图片',  
+  },
+  {  
+    key: '/admin/pictureManage',  
+    label: '图片管理',  
+    title: '图片管理',  
+  },
   {
     key: '/admin/userManage',
     label: '用户管理',
@@ -114,6 +124,7 @@ const originItems = [
     label: h('a', { href: 'http://www.juicew.com', target: '_blank' }, 'Juice'),
     title: 'Juice',
   },
+
 ]
 
 // 过滤菜单项
