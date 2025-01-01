@@ -47,7 +47,7 @@
         <div style="margin-bottom: 16px;"></div>
 
         <!-- // 表格 -->
-        <a-table :columns="columns" :data-source="dataList" :pagination="pagination" @change="doTableChange" :scroll="{x: 'max-content'}">
+        <a-table :columns="columns" :data-source="dataList" :pagination="pagination" @change="doTableChange" >
             <template #bodyCell="{ column, record }">  
                 <template v-if="column.dataIndex === 'url'">  
                     <a-image :src="record.url" :width="120" />  
@@ -196,7 +196,8 @@ const searchParams = reactive<API.PictureQueryRequest>({
 // 获取数据
 const fetchData = async () => {
   const res = await listPictureByPageUsingPost({
-    ...searchParams
+    ...searchParams,
+    nullSpaceId: true,
   })
   if (res.data.data) {
     dataList.value = res.data.data.records ?? []
