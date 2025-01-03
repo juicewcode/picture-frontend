@@ -25,7 +25,13 @@
                     />
             </a-space>
         </a-flex>
+        
 
+        <!-- 搜索表单 -->  
+        <PictureSearchForm :onSearch="onSearch" />
+
+
+        <div style="margin-bottom: 16px"></div>
         <!-- 图片列表 -->
         <!-- 图片列表 -->
         <PictureList :dataList="dataList"
@@ -55,6 +61,7 @@ import { message } from 'ant-design-vue'
 import { listPictureVoByPageUsingPost } from '@/api/pictureController';
 import { formatSize } from '@/utils';
 import PictureList from '../components/PictureList.vue'
+import PictureSearchForm from '@/components/PictureSearchForm.vue';
 
 
 const props = defineProps<{
@@ -87,43 +94,54 @@ const dataList = ref([])
 const total = ref(0)
 const loading = ref(true)
 
-// 搜索条件
-const searchParams = reactive<API.PictureQueryRequest>({
-  current: 1,
-  pageSize: 12,
-  sortField: 'createTime',
-  sortOrder: 'descend',
-})
-
-// 分页参数
-const onPageChange = (page, pageSize) => {
-  searchParams.current = page
-  searchParams.pageSize = pageSize
-  fetchData()
-}
-
-// 获取数据
-const fetchData = async () => {
-  loading.value = true
-  // 转换搜索参数
-  const params = {
-    spaceId: props.id,
-    ...searchParams,
-  }
-  const res = await listPictureVoByPageUsingPost(params)
-  if (res.data.data) {
-    dataList.value = res.data.data.records ?? []
-    total.value = res.data.data.total ?? 0
-  } else {
-    message.error('获取数据失败，' + res.data.message)
-  }
-  loading.value = false
-}
-
 // 页面加载时请求一次
 onMounted(() => {
   fetchData()
 })
+
+// 搜索条件  
+const searchParams = ref<API.PictureQueryRequest>({  
+  current: 1,  
+  pageSize: 12,  
+  sortField: 'createTime',  
+  sortOrder: 'descend',  
+})  
+  
+// 分页参数  
+const onPageChange = (page, pageSize) => {  
+  searchParams.value.current = page  
+  searchParams.value.pageSize = pageSize  
+  fetchData()  
+}  
+  
+// 搜索  
+const onSearch = (newSearchParams: API.PictureQueryRequest) => {  
+  searchParams.value = {  
+    ...searchParams.value,  
+    ...newSearchParams,  
+    current: 1,  
+  }  
+  fetchData()  
+}  
+  
+// 获取数据  
+const fetchData = async () => {  
+  loading.value = true  
+  // 转换搜索参数  
+  const params = {  
+    spaceId: props.id,  
+    ...searchParams.value,  
+  }  
+
+  const res = await listPictureVoByPageUsingPost(params)  
+  if (res.data.data) {  
+    dataList.value = res.data.data.records ?? []  
+    total.value = res.data.data.total ?? 0  
+  } else {  
+    message.error('获取数据失败，' + res.data.message)  
+  }  
+  loading.value = false  
+}
 
 
 </script>

@@ -4,6 +4,7 @@ import { message } from 'ant-design-vue'
 // 创建 Axios 实例
 const myAxios = axios.create({
     baseURL: 'http://localhost:8080',
+    // baseURL: 'http://pic.juicew.com',
     timeout: 60000,
     withCredentials: true,
 })
