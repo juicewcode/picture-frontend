@@ -61,6 +61,8 @@
         </a-space>  
       </a-form-item>
     </a-form>  
+
+
   </div>
 
 
@@ -68,7 +70,7 @@
 
 
 <script lang="ts" setup>
-import { listPictureTagCategoryUsingGet } from '@/api/pictureController';
+import { listPictureTagCategoryUsingGet, searchPictureByColorUsingPost } from '@/api/pictureController';
 import { message } from 'ant-design-vue';
 import { computed, onMounted, reactive, ref } from 'vue';
 import dayjs from 'dayjs';
