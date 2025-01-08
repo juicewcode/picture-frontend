@@ -24,6 +24,13 @@
                 </ASpace>
                 <template #overlay>
                   <a-menu>
+                    
+                    <a-menu-item>
+                      <router-link to="/my_space">
+                        <UserOutlined />
+                        我的空间
+                      </router-link>
+                    </a-menu-item>
                     <a-menu-item @click="doLogout">
                       <LogoutOutlined />
                       退出登录
@@ -62,6 +69,7 @@ const loginUserStore = useLoginUserStore()
 import { useRouter } from "vue-router";
 import { useLoginUserStore } from '@/stores/useLoginUserStore';
 import { userLogoutUsingPost } from '@/api/userController';
+import { UserOutlined } from '@ant-design/icons-vue';
 
 const router = useRouter();
 // 当前选中菜单
@@ -124,6 +132,12 @@ const originItems = [
     label: h('a', { href: 'http://www.juicew.com', target: '_blank' }, 'Juice'),
     title: 'Juice',
   },
+  {
+    key: '/admin/spaceManage',
+    label: '空间管理',
+    title: '空间管理',
+  },
+
 
 ]
 

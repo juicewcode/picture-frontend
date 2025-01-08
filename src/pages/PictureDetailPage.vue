@@ -49,12 +49,33 @@
             <a-descriptions-item label="大小">  
               {{ formatSize(picture.picSize) }}  
             </a-descriptions-item>  
+
+            <a-descriptions-item label="主色调">
+              <a-space>
+                {{ picture.picColor ?? '-' }}
+                <div
+                  v-if="picture.picColor"
+                  :style="{
+                    backgroundColor: toHexColor(picture.picColor),
+                    width: '16px',
+                    height: '16px',
+                  }"
+                />
+              </a-space>
+            </a-descriptions-item>
+
           </a-descriptions>  
           <a-space wrap>
             <a-button type="primary" @click="doDownload">  
               免费下载  
               <template #icon>  
                 <DownloadOutlined />  
+              </template>  
+            </a-button>
+            <a-button type="primary" ghost @click="doShare">  
+              分享  
+              <template #icon>  
+                <share-alt-outlined />  
               </template>  
             </a-button>
             <a-button v-if="canEdit" type="default" @click="doEdit">  
@@ -73,6 +94,7 @@
         </a-card>  
       </a-col>  
     </a-row>
+    <ShareModal ref="shareModalRef" :link="shareLink" />
   </div>
 </template>
 
@@ -87,11 +109,13 @@ import { useLoginUserStore } from '@/stores/useLoginUserStore'
 import { getPictureVoByIdUsingGet, deletePictureUsingPost } from '@/api/pictureController'
 import { defineProps } from 'vue'
 import {downloadImage} from '@/utils/index'
-import { API } from '@/api/types'
 import { formatSize } from '@/utils/index'
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons-vue'
 import { useRouter } from 'vue-router'
 import { DownloadOutlined } from '@ant-design/icons-vue'
+import ShareModal from '@/components/ShareModel.vue'
+import { ShareAltOutlined } from '@ant-design/icons-vue'
+import { toHexColor } from '@/utils/index'
 
 
 const props = defineProps<{  
@@ -136,10 +160,17 @@ const canEdit = computed(() => {
 
 const router = useRouter()
 
-// 编辑  
-const doEdit = () => {  
-  router.push('/add_picture?id=' + picture.value.id)  
-}  
+// 编辑
+const doEdit = () => {
+  router.push({
+    path: '/add_picture',
+    query: {
+      id: picture.value.id,
+      spaceId: picture.value.spaceId
+    }
+  })
+}
+
 // 删除  
 const doDelete = async () => {  
   const id = picture.value.id  
@@ -158,6 +189,21 @@ const doDelete = async () => {
 const doDownload = () => {  
   downloadImage(picture.value.url)  
 }
+
+// 分享弹窗引用  
+const shareModalRef = ref()  
+// 分享链接  
+const shareLink = ref<string>()  
+  
+// 分享  
+const doShare = () => {  
+  shareLink.value = `${window.location.protocol}//${window.location.host}/picture/${picture.value.id}`  
+  if (shareModalRef.value) {  
+    shareModalRef.value.openModal()  
+  }  
+}
+
+
 
 
 </script>
