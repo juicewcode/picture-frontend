@@ -1,8 +1,9 @@
 <template>
 <div id="addSpacePage">  
-  <h2 style="margin-bottom: 16px">  
-  {{ route.query?.id ? '修改图片' : '创建图片' }}  
+  <h2 style="margin-bottom: 16px">
+    {{ route.query?.id ? '修改' : '创建' }}{{ SPACE_TYPE_MAP[spaceType] }}
   </h2>
+
 
     <a-form layout="vertical" :model="formData" @finish="handleSubmit">
         <a-form-item label="空间名称" name="spaceName">
@@ -44,7 +45,7 @@
 
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import{ reactive } from 'vue'
 import { message } from 'ant-design-vue'
 import { addSpaceUsingPost, listSpaceLevelUsingGet, updateSpaceUsingPost } from '@/api/spaceController'
@@ -52,7 +53,7 @@ import { useRouter } from 'vue-router'
 import { onMounted } from 'vue'
 import { getSpaceVoByIdUsingGet } from '@/api/spaceController'
 import { useRoute } from 'vue-router'
-import { SPACE_LEVEL_ENUM, SPACE_LEVEL_OPTIONS } from '@/constants/space'
+import { SPACE_LEVEL_ENUM, SPACE_LEVEL_OPTIONS, SPACE_TYPE_ENUM, SPACE_TYPE_MAP } from '@/constants/space'
 import { formatSize } from '@/utils'
 
 const formData = reactive<API.SpaceAddRequest | API.SpaceUpdateRequest>({
@@ -99,6 +100,7 @@ const handleSubmit = async (values: any) => {
     // 创建
     res = await addSpaceUsingPost({
       ...formData,
+      spaceType: spaceType.value
     })
   }
   if (res.data.code === 0 && res.data.data) {
@@ -138,6 +140,14 @@ const getOldSpace = async () => {
 // 页面加载时，请求老数据
 onMounted(() => {
   getOldSpace()
+})
+
+// 空间类别
+const spaceType = computed(() => {
+  if (route.query?.type) {
+    return Number(route.query.type)
+  }
+  return SPACE_TYPE_ENUM.PRIVATE
 })
 
 
